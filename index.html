@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE
+The complete set of authors may be found at http://polymer.github.io/AUTHORS
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS
+-->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+	<script src="../platform/platform.js"></script>
+	<link rel="import" href="../polymer/polymer.html">
+	<link rel="import" href="../core-component-page/core-component-page.html">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+<body unresolved>
+	<polymer-element name="transactions-element" noscript attributes="width">
+
+	<template>
+
+		<link rel="stylesheet" href="assets/css/flaticon.css">
+		<link rel="stylesheet" href="assets/css/main.css">
+		<style>
+		:host{
+			width: {{width}};
+		}
+		</style>
+		<div id="header">
+			<span id="icon" class="flaticon-hand132"></span>
+			<h1>Transactions</h1>
+		</div>
+		<div id="content">
+			<table>
+				<tr>
+					<th>Date</th>
+					<th>Description</th>
+					<th>Category</th>
+					<th>Amount</th>
+				</tr>
+				<template repeat="{{entry in entries}}">
+
+					<tr>
+						<td>{{entry.date}}</td>
+						<td>{{entry.description}}</td>
+						<td>{{entry.category}}</td>
+						<td>${{entry.amount}}</td>
+					</tr>
+
+				</template>
+			</table>
+		</div>
+
+		<core-ajax
+		auto
+		url="http://localhost:3000/finance/transactions"
+		params='{"alt":"json", "q":"chrome"}'
+		handleAs="json"
+		on-core-response="{{handleResponse}}"></core-ajax>
+	</template>
+
+
+	<script>
+	Polymer('transactions-element',{
+		name: 'transactions',
+		month: 'September 10',
+		entries: [
+		/* Sample entry
+		{
+			"date":"September 10",
+			"description":"Transfer to credit card",
+			"category":"Credit Card Payment",
+			"amount":"300"
+		}
+		 */
+		],
+		ready: function(){
+			//...
+		},
+		handleResponse: function(data){
+			this.entries = data.detail.response.transactions;
+		}
+	});
+	</script>
+</polymer-element>
+
+</body>
+</html>
