@@ -1,88 +1,98 @@
-<link rel="import" href="../polymer/polymer.html">
 
-<!--
-Element providing solution to no problem in particular.
 
-##### Example
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-    <seed-element></seed-element>
+<polymer-element name="transactions-element" attributes="url">
 
-@element seed-element
-@blurb Element providing solution to no problem in particular.
-@status alpha
-@homepage http://polymerlabs.github.io/seed-element
--->
-<polymer-element name="seed-element" attributes="notitle author">
+    <template>
 
-  <template>
+      <link rel="stylesheet" href="assets/css/flaticon.css">
+      <link rel="stylesheet" href="transactions-element.css">
+      <div id="header">
+        <span id="icon" class="flaticon-hand132"></span>
+        <h1>Transactions</h1>
+      </div>
+      <div id="content">
+        <table>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
+          <template repeat="{{entry in entries}}">
 
-    <link rel="stylesheet" href="seed-element.css" />
-    
-    <h1>Hello from seed-element</h1>
-    <content></content>
+            <tr>
+              <td>{{entry.formattedDate}}</td>
+              <td>{{entry.description}}</td>
+              <td>{{entry.category}}</td>
+              <td>${{entry.amount}}</td>
+            </tr>
+
+          </template>
+        </table>
+      </div>
+
+      <core-ajax
+      auto
+      url="{{url}}"
+      params='{"alt":"json", "q":"chrome"}'
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      on-core-error="{{handleError}}"></core-ajax>
 
   </template>
 
   <script>
-
-    Polymer('seed-element', {
-      /**
-       * The `author` attribute sets an initial author
-       * 
-       * @attribute author
-       * @type string
-       * @default 'Dimitri Glazkov'
+    Polymer('transactions-element',{
+      name: 'transactions',
+      author: 'Marwan Aziz',
+      url: 'http://localhost:3000/finance/transactions',
+      entries: [
+      /* Sample entry
+      {
+        "date":"September 10",
+        "description":"Transfer to credit card",
+        "category":"Credit Card Payment",
+        "amount":"300"
+      }
        */
-      author: 'Dimitri Glazkov',
-      
-      /**
-       * `fancy` is a property that does something fancy.
-       * 
-       * @property fancy
-       * @type bool
-       * @default false
-       */
-      fancy: false,
-
-      ready: function() {
-        // Ready is a lifecycle callback.
-        // You can do setup work in here.
-        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+      ],
+      ready: function(){
+        //...
       },
-
-      /**
-       * The `sayHello` method will return a greeting.
-       * 
-       * @method sayHello
-       * @param {String} greeting Pass in a specific greeting.
-       * @return {String} Returns a string greeting.
-       */
-      sayHello: function(greeting) {
-        var response = greeting || 'Hello World!';
-        return 'seed-element says, ' + response;
+      handleError: function(){
+        // TODO: implement error handler
+        console.log("error");
       },
+      handleResponse: function(evt, data){
+        
+        var transactions = data.response.transactions;
+        this.entries = this.formatDate(transactions);
+        this.sortByDate(this.entries);
+        
+      },
+      formatDate: function(transactions){
+        var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+        var resultA = [];
+        for(var i=0; i < transactions.length; i++){
+          var entry = transactions[i];
+          var date = new Date(entry.date);
+          entry.date = date;
+          entry.formattedDate = monthNames[date.getMonth()]+" "+date.getDate();
+          
+          resultA.push(entry);
 
-      /**
-       * The `seed-element-lasers-success` event is fired whenever we
-       * call fireLasers.
-       * 
-       * @event seed-element-lasers-success
-       * @param {Object} detail
-       *   @param {string} detail.sound An amazing sound.
-       */
-
-      /**
-       * The `fireLasers` method will fire the lasers. At least
-       * it will dispatch an event that claims lasers were fired :)
-       * 
-       * @method fireLasers
-       */
-      fireLasers: function() {
-        this.fire('seed-element-lasers-success', { sound: 'Pew pew pew!' });
+        }
+        return resultA;
+      },
+      sortByDate: function(transactions){
+        transactions.sort(function(a, b){
+          return a.date - b.date;
+        });
       }
 
     });
-
   </script>
 
 </polymer-element>

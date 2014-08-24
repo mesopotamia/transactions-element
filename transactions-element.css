@@ -18,7 +18,8 @@ polyfill-next-selector { content: ':host > h2'; }
 	min-width: 348px !important;
 	
 }
-span{
+polyfill-next-selector { content: ':host > div > span'; }
+::content div > span {
 	color: white;
 }
 #header > h1{
