@@ -1,9 +1,9 @@
 /* To ensure your styling works under the Shadow DOM polyfill, see
    www.polymer-project.org/docs/polymer/styling.html#directives */
-polyfill-next-selector { content: ':host > h2'; }
+/*polyfill-next-selector { content: ':host > h2'; }
 ::content h2 {
   color: blue;
-}
+}*/
 :host{
 	display: block;
 	min-height: 100px;
@@ -18,8 +18,7 @@ polyfill-next-selector { content: ':host > h2'; }
 	min-width: 348px !important;
 	
 }
-polyfill-next-selector { content: ':host > div > span'; }
-::content div > span {
+div > span {
 	color: white;
 }
 #header > h1{
