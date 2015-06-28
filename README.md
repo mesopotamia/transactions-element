@@ -1,6 +1,8 @@
 transactions-element
 ================
 
+![transactions-element](https://cloud.githubusercontent.com/assets/5740702/8397521/92fc51ec-1d9c-11e5-8719-71480031791c.png)
+
 See the [component page](http://polymerlabs.github.io/seed-element) for more information.
 
 ## Getting Started
