@@ -2,7 +2,7 @@
 
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="transactions-element" attributes="url">
+<polymer-element name="transactions-element" attributes="url currency">
 
     <template>
 
@@ -26,7 +26,7 @@
               <td>{{entry.formattedDate}}</td>
               <td>{{entry.description}}</td>
               <td>{{entry.category}}</td>
-              <td>${{entry.amount}}</td>
+              <td>{{currency}}{{entry.amount}}</td>
             </tr>
 
           </template>
@@ -48,6 +48,7 @@
       name: 'transactions',
       author: 'Marwan Aziz',
       url: 'http://localhost:3000/finance/transactions',
+      currency: '$',
       entries: [
       /* Sample entry
       {
